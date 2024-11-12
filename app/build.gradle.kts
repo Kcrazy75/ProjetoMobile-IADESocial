@@ -63,6 +63,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.constraintlayout.compose.android)
+    implementation(libs.androidx.benchmark.macro)
 
     testImplementation(libs.junit)
 
@@ -74,6 +75,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    implementation ("com.github.skydoves:landscapist-glide:1.5.2")
-    implementation ("androidx.compose.material:material-icons-extended:1.3.1")
+    //implementation ("com.github.skydoves:landscapist-glide:1.5.2")
+    implementation ("androidx.compose.material:material-icons-extended:1.7.5")
 }
