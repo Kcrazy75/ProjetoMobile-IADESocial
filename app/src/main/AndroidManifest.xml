@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -12,9 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.IADESocial">
 
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".SignUpActivity"/>
-        <activity android:name=".MainFeedActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.SignUpActivity"/>
+        <activity android:name=".activity.WelcomeActivity"/>
+        <activity android:name=".activity.ProfileActivity"/>
+        <activity android:name=".MainFeed"/>
 
         <activity android:name=".MainActivity"
             android:exported="true">
@@ -24,8 +27,4 @@
             </intent-filter>
         </activity>
     </application>
-
-    <uses-permission
-        android:name="android.permission.INTERNET"/>
-
 </manifest>

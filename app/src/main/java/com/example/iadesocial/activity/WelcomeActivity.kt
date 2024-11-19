@@ -1,11 +1,18 @@
-package com.example.iadesocial
+package com.example.iadesocial.activity
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -19,21 +26,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.iadesocial.activity.LoginActivity
-import com.example.iadesocial.activity.SignUpActivity
+import com.example.iadesocial.MainFeed
+import com.example.iadesocial.R
 
-class MainActivity : ComponentActivity() {
+class WelcomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            Surface{
+            Surface {
                 WelcomeView(
                     onLoginClick = {
+                        //navController.navigate(Routes.login)
                         val intent = Intent(this, LoginActivity::class.java)
                         startActivity(intent)
                         MainFeed()
                     },
                     onSignUpClick = {
+                        //navController.navigate(Routes.signup)
                         val intent = Intent(this, SignUpActivity::class.java)
                         startActivity(intent)
                     }
@@ -70,8 +79,8 @@ fun WelcomeView(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
         Button(
             onClick = onLoginClick,
             colors = ButtonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
+                containerColor = Color(0xFFA52A2A),
+                contentColor = Color.Black,
                 disabledContainerColor = Color.Gray,
                 disabledContentColor = Color.Black),
 
@@ -85,8 +94,8 @@ fun WelcomeView(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
         Button(
             onClick = onSignUpClick,
             colors = ButtonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
+                containerColor = Color(0xFFA52A2A),
+                contentColor = Color.Black,
                 disabledContainerColor = Color.Gray,
                 disabledContentColor = Color.Black),
 

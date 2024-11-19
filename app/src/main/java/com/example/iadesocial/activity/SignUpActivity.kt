@@ -1,4 +1,4 @@
-package com.example.iadesocial
+package com.example.iadesocial.activity
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,22 +29,27 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.iadesocial.MainFeed
+import com.example.iadesocial.R
 
 class SignUpActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            Surface(color = Color(0xFFFAFAFA)) {
                 SignUpScreen(
                     onSignUpClick = {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
                         Toast.makeText(this, "Sign Up Successful", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this, MainFeed::class.java)
+                        startActivity(intent)
                         finish()
                     }
                 )
             }
         }
     }
+}
 
 @Composable
 fun SignUpScreen(onSignUpClick: () -> Unit) {
@@ -62,14 +68,14 @@ fun SignUpScreen(onSignUpClick: () -> Unit) {
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Top
     ) {
         Image(
-            painter = painterResource(R.drawable.ic_iadesociallogo),
+            painter = painterResource(R.drawable.ic_applogo),
             contentDescription = null,
-            modifier = Modifier.size(150.dp)
+            modifier = Modifier.size(240.dp)
         )
-        Spacer(modifier = Modifier.height(32.dp))
+        //Spacer(modifier = Modifier.height(32.dp))
 
         OutlinedTextField(
             modifier = Modifier
@@ -174,15 +180,20 @@ fun SignUpScreen(onSignUpClick: () -> Unit) {
 
         Button(
             onClick = {
-                if (userID.isNotEmpty() && fullName.isNotEmpty() && userName.isNotEmpty() && password.isNotEmpty() && passwordC.isNotEmpty()) {
-                    onSignUpClick()
+                if (password.equals(passwordC)) {
+                    if (userID.isNotEmpty() && fullName.isNotEmpty() && userName.isNotEmpty() && password.isNotEmpty()){
+                        onSignUpClick(userID,fullName,userName,password,passwordC)
+                        TODO("Add message 'Sign Up Successful!' Not yet implemented")
+                    }   else {
+                        TODO("Add message 'Please fill in all fields!' Not yet implemented")
+                    }
                 } else {
-                    //Toast.makeText(this,"Please fill in all fields",Toast.LENGTH_SHORT).show()
+                    TODO("Add message 'Password and Confirm Password don't match!' Not yet implemented")
                 }
             },
             colors = ButtonColors(
-                containerColor = Color.Black,
-                contentColor = Color.White,
+                containerColor = Color(0xFFA52A2A),
+                contentColor = Color.Black,
                 disabledContainerColor = Color.Gray,
                 disabledContentColor = Color.Black),
 
@@ -194,6 +205,10 @@ fun SignUpScreen(onSignUpClick: () -> Unit) {
             Text("Sign Up")
         }
     }
+}
+
+fun onSignUpClick(userID: String, fullName: String, userName: String, password: String, passwordC: String) {
+    TODO("Not yet implemented")
 }
 
 @Preview(showBackground = true)

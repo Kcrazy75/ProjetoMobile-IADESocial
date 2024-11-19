@@ -77,4 +77,6 @@ dependencies {
 
     implementation ("com.github.skydoves:landscapist-glide:1.5.2")
     implementation ("androidx.compose.material:material-icons-extended:1.7.5")
+
+    implementation("androidx.navigation:navigation-compose:2.8.4")
 }
