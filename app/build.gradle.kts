@@ -16,9 +16,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        vectorDrawables {  useSupportLibrary = true }
     }
 
     buildTypes {
@@ -34,20 +32,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
+    kotlinOptions { jvmTarget = "1.8" }
+    buildFeatures { compose = true }
+    composeOptions { kotlinCompilerExtensionVersion = "1.5.1" }
+    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
 }
 
 dependencies {
@@ -64,6 +52,7 @@ dependencies {
     implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.constraintlayout.compose.android)
     implementation(libs.androidx.benchmark.macro)
+    implementation(libs.androidx.runtime.livedata)
 
     testImplementation(libs.junit)
 
@@ -74,9 +63,15 @@ dependencies {
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    implementation (libs.androidx.material.icons.extended)
 
-    implementation ("com.github.skydoves:landscapist-glide:1.5.2")
-    implementation ("androidx.compose.material:material-icons-extended:1.7.5")
+    implementation (libs.retrofit2.retrofit)
+    implementation (libs.converter.gson)
+    implementation (libs.logging.interceptor)
+    implementation (libs.okhttp)
 
-    implementation("androidx.navigation:navigation-compose:2.8.4")
+    implementation(libs.coil.compose)
+
+    //implementation (libs.landscapist.glide)
+    //implementation(libs.androidx.navigation.compose)
 }

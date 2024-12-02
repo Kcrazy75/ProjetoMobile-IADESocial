@@ -45,21 +45,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.iadesocial.activity.ProfileScreen
-import com.example.iadesocial.data.Post
-import com.example.iadesocial.data.sampleComments
-import com.example.iadesocial.data.samplePosts
+import com.example.iadesocial.data.models.entities.Post
+import com.example.iadesocial.data.SampleData
 import com.example.iadesocial.items.PostItem
 
 class MainFeed : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MainFeedScreen() }
+        setContent { MainFeedScreen(SampleData.postsForProfile1) }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainFeedScreen(posts: List<Post> = samplePosts()) {
+fun MainFeedScreen(posts: List<Post>) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     var selectedTab by remember { mutableStateOf("Home") }
 
@@ -150,7 +149,7 @@ fun MainFeedScreen(posts: List<Post> = samplePosts()) {
                 IconButton(
                     modifier = Modifier
                         .size(45.dp),
-                    onClick = { /* selectedTab.value = "Create Post" */ },
+                    onClick = { /* selectedTab = "CreatePost" */ },
                 ) {
                     Icon(
                         imageVector = Icons.Filled.CameraAlt,
@@ -175,7 +174,9 @@ fun MainFeedScreen(posts: List<Post> = samplePosts()) {
         Box(modifier = Modifier.padding(innerPadding)){
             when (selectedTab) {
                 "Home" -> HomeScreen(posts)
-                //"Create Post" -> CreatePostScreen(modifier = Modifier.padding(innerPadding))
+                //"CreatePost" -> CreatePostScreen()
+                //"Search" -> SearchScreen()
+                //"ViewPost" -> ViewPostScreen()"
                 "Profile" -> ProfileScreen()
             }
         }
@@ -189,11 +190,12 @@ fun HomeScreen(posts: List<Post>) {
         userScrollEnabled = true,
         modifier = Modifier
             .fillMaxWidth()
-    ) {items(posts) {posts -> PostItem(posts,sampleComments()) } }
+    ) {items(posts) {posts -> PostItem(posts,SampleData.profile1.comments) } }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun MainFeedPreview() {
-    MainFeedScreen(samplePosts())
+    val posts = SampleData.postsForProfile1
+    MainFeedScreen(posts)
 }

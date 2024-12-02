@@ -1,9 +1,5 @@
-package com.example.iadesocial.activity
+package com.example.iadesocial.data.models.views
 
-import android.content.Intent
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,33 +21,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.iadesocial.MainFeed
 import com.example.iadesocial.R
 
-class WelcomeActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Surface {
-                WelcomeView(
-                    onLoginClick = {
-                        //navController.navigate(Routes.login)
-                        val intent = Intent(this, LoginActivity::class.java)
-                        startActivity(intent)
-                        MainFeed()
-                    },
-                    onSignUpClick = {
-                        //navController.navigate(Routes.signup)
-                        val intent = Intent(this, SignUpActivity::class.java)
-                        startActivity(intent)
-                    }
-                )
-            }
-        }
-    }
-}
+@Preview(showBackground = true)
+@Composable
+fun WelcomeScreenPreview(){ WelcomeView(onLoginClick = {}, onSignUpClick = {}) }
 
-//@Preview(showBackground = true)
 @Composable
 fun WelcomeView(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
     Column(
@@ -107,10 +81,4 @@ fun WelcomeView(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
             Text("Sign Up")
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WelcomeScreenPreview(){
-    WelcomeView(onLoginClick = {}, onSignUpClick = {})
 }

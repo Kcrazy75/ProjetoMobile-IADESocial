@@ -42,16 +42,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.iadesocial.R
-import com.example.iadesocial.data.Comment
-import com.example.iadesocial.data.Post
-import com.example.iadesocial.data.sampleComments
-import com.example.iadesocial.data.samplePost
-import com.example.iadesocial.data.sampleUsers
+import com.example.iadesocial.data.models.entities.Comment
+import com.example.iadesocial.data.models.entities.Post
+import com.example.iadesocial.data.SampleData
 
 @Preview(showBackground = true)
 @Composable
 fun PostItemPreview() {
-    PostItem(samplePost(), sampleComments())
+    val post = SampleData.postsForProfile1[0]
+    val comments = SampleData.postsForProfile1[0].comments
+    PostItem(post,comments)
 }
 
 @Composable
@@ -84,7 +84,7 @@ fun PostItem(post: Post, comments: List<Comment>) {
             Text(
                 modifier = Modifier
                     .width(290.dp),
-                text = post.username,
+                text = post.profile.name,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 fontSize = 18.sp,
@@ -108,14 +108,16 @@ fun PostItem(post: Post, comments: List<Comment>) {
         }
 
         //2nd Row
-        if (post.imageUrl != null) {
+        if (true) {     //post.image != 0
             Image(
-                painter = painterResource(id = R.drawable.ic_background),
+                painter = painterResource(id = R.drawable.postex_1),     //post.image
                 contentDescription = "User Post",
-                contentScale = ContentScale.Crop,
+                contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .clip(shape = RectangleShape)
                     .fillMaxWidth()
+                    //.size(700.dp)
+                    .background(Color.Black)
                 //.padding(4.dp)
                 //.background(Color.White)
             )
@@ -136,7 +138,7 @@ fun PostItem(post: Post, comments: List<Comment>) {
                     .clickable{ showFullContent = !showFullContent },
                 text = buildAnnotatedString{
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold))
-                    {append(post.username)}
+                    {append(post.profile.name)}
                     append(" "+post.content)
                 },
                 maxLines = if (showFullContent) 10 else 1,
@@ -167,20 +169,20 @@ fun PostItem(post: Post, comments: List<Comment>) {
         }
         //Placeholder for comments
         CommentsSection(comments,isExpanded) {isExpanded = !isExpanded}
-        Spacer(modifier = Modifier.height(8.dp))
+        //Spacer(modifier = Modifier.height(8.dp))
     }
     Spacer(modifier = Modifier.height(8.dp))
 }
 
 @Composable
 fun CommentsSection(comments: List<Comment>, isExpanded: Boolean, onToggle: () -> Unit) {
-    val user = sampleUsers()
+    val profile = SampleData.profile1
 
     Column(
         modifier = Modifier
             .height(60.dp)
             .fillMaxWidth()
-            .padding(bottom = 8.dp)
+            //.padding(bottom = 2.dp)
     ) {
         Column(
             modifier = Modifier
@@ -190,12 +192,12 @@ fun CommentsSection(comments: List<Comment>, isExpanded: Boolean, onToggle: () -
             if (comments.isNotEmpty()) {
                 if (!isExpanded) {
                     Text(
-                        text = "${user[0].username} ${comments[0].content}",
+                        text = "${profile.name} ${comments[0].content}",
                         style = MaterialTheme.typography.bodyMedium,
                         color = Color.Black,
                         modifier = Modifier
-                            .clipToBounds()
-                            .clickable { onToggle() },
+                            .clipToBounds(),
+                            //.clickable { onToggle() },
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
@@ -210,7 +212,7 @@ fun CommentsSection(comments: List<Comment>, isExpanded: Boolean, onToggle: () -
                 } else {
                     comments.forEach {
                         comment -> Text(
-                            text = "${user[0].username}: ${comment.content}",
+                            text = "${profile.name}: ${comment.content}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = Color.Gray,
                             modifier = Modifier

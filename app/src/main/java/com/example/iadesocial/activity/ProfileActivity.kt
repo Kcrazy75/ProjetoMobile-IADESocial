@@ -6,8 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,10 +19,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,8 +40,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.iadesocial.R
-import com.example.iadesocial.data.Post
-import com.example.iadesocial.data.samplePosts
+import com.example.iadesocial.data.models.entities.Post
+import com.example.iadesocial.data.models.entities.Profile
+import com.example.iadesocial.data.SampleData
+import com.example.iadesocial.data.SampleData.followers
 
 class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,59 +57,46 @@ class ProfileActivity : ComponentActivity() {
 @Composable
 fun ProfileScreen(){
     //var selectedTab by remember { mutableIntStateOf(0) }
+    val profiles = SampleData.profiles
+    val p: Profile = profiles[0]
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .scrollable(
-            orientation = Orientation.Vertical,
-            state = rememberScrollState(),
-            enabled = true
-            )
-        ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(10.dp)
+            modifier = Modifier.fillMaxWidth().padding(6.dp)
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_iade),
+                painter = painterResource(id = R.drawable.ic_iade),    //p.image
                 contentDescription = null,
                 modifier = Modifier
-                    .aspectRatio(1f, matchHeightConstraintsFirst = true)
                     .border(1.dp, Color.Black, CircleShape)
                     .padding(3.dp)
                     .clip(CircleShape)
-                    .size(100.dp)
-                    .weight(3f)
+                    .size(80.dp)
             )
             Spacer(modifier = Modifier.width(16.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier
-                    .weight(7f)
+                modifier = Modifier.weight(7f)
             ) {
                 //Profile Stats, need to be coded in
-                ProfileStat(numberText = "3", text = "Posts")
-                ProfileStat(numberText = "5", text = "Followers")
-                ProfileStat(numberText = "6", text = "Following")
+                ProfileStat(numberText = p.posts.size.toString(), text = "Posts")
+                ProfileStat(numberText = p.followers.size.toString(), text = "Followers")
+                ProfileStat(numberText = p.following.size.toString(), text = "Following")
             }
         }
         Spacer(modifier = Modifier.width(10.dp))
 
         //Just an Example!! Needs to be an Object
         ProfileDescription(
-            displayName = "Kelvin Lamas",
-            description = "2 years of coding experience \n" +
-                    "Want me to break your app. Just email me!",
-            //url = "https://www.youtube.com/codingbeast",
-            followedBy = listOf("Aricarlo","E. Peixoto"),
-            otherCount = 3
+            displayName = p.name,
+            description = p.bio,
+            followedBy = listOf(followers[0].followerProfile.name,followers[1].followerProfile.name),
+            otherCount = p.followers.size - 2
         )
-
-        Spacer(modifier = Modifier.height(10.dp))
-        PostSection(samplePosts())
+        Spacer(modifier = Modifier.height(8.dp))
+        PostSection(p.posts)
     }
 }
 
@@ -116,11 +106,10 @@ fun PostSection(post: List<Post>){
         columns = GridCells.Fixed(3),
         modifier = Modifier
             .scale(1.01f)
-
     ){
         items(post.size){
             Image(
-                painter = painterResource(id = R.drawable.ic_background),
+                painter = painterResource(id = R.drawable.postex_1),   //post[it].content
                 contentDescription ="post",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -132,26 +121,26 @@ fun PostSection(post: List<Post>){
         }
         items(post.size){
             Image(
-                painter = painterResource(id = R.drawable.ic_background),
+                painter = painterResource(id = R.drawable.postex_2),   //post[it].content
                 contentDescription ="post",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .aspectRatio(1f)
                     .border(width = 1.dp,color = Color.White)
                     //.padding(1.dp)
-                    .clickable { /* add navigation */ }
+                    .clickable { /* Change to Post View */ }
             )
         }
         items(post.size){
             Image(
-                painter = painterResource(id = R.drawable.ic_background),
+                painter = painterResource(id = R.drawable.postex_4),   //post[it].content
                 contentDescription ="post",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .aspectRatio(1f)
                     .border(width = 1.dp,color = Color.White)
                     //.padding(1.dp)
-                    .clickable { /* add navigation */ }
+                    .clickable { /* Change to Post View */ }
             )
         }
     }
@@ -160,68 +149,49 @@ fun PostSection(post: List<Post>){
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview(){
-    //ProfileSection()
     ProfileScreen()
-    //ProfileScreen(sampleProfile(), innerPadding = PaddingValues())
 }
 
 @Composable
-fun ProfileStat(
-    numberText: String,
-    text: String,
-){
+fun ProfileStat( numberText: String, text: String){
     Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+       verticalArrangement = Arrangement.Center,
+       horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(
-            text = numberText,
-            fontWeight = FontWeight.Bold,
-            fontSize = 20.sp,
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = text,
-        )
+       Text(
+           text = numberText,
+           fontWeight = FontWeight.Bold,
+           fontSize = 20.sp,
+       )
+        Text( text = text )
     }
 }
 
 @Composable
-fun ProfileDescription(
-    displayName: String,
-    description: String,
-    //url: String,
-    followedBy: List<String>,
-    otherCount: Int
-){
-    val letterSpacing = 0.5.sp
-    val lineHeight = 20.sp
+fun ProfileDescription( displayName: String, description: String, followedBy: List<String>, otherCount: Int){
+    //val letterSpacing = 0.5.sp
+    //val lineHeight = 20.sp
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(6.dp)
+
     ) {
         Text(
             text = displayName,
             fontWeight = FontWeight.Bold,
             fontSize = 16.sp,
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight
+            letterSpacing = 0.5.sp,
+            lineHeight = 20.sp
         )
         Text(
             text = description,
             fontSize = 16.sp,
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight
+            letterSpacing = 0.5.sp,
+            lineHeight = 20.sp
         )
-        Text(
-            text = "",
-            fontSize = 16.sp,
-            color = Color(0xFF4D61CF),
-            letterSpacing = letterSpacing,
-            lineHeight = lineHeight
-        )
+        Spacer(modifier = Modifier.height(6.dp))
         if(followedBy.isNotEmpty()){
             Text(
                 text = buildAnnotatedString {
@@ -244,8 +214,8 @@ fun ProfileDescription(
                         append("$otherCount others")
                     }
                 },
-                letterSpacing = letterSpacing,
-                lineHeight = lineHeight
+                //letterSpacing = 0.5.sp,
+                //lineHeight = 20.sp
 
             )
         }
