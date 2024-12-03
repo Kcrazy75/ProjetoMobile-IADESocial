@@ -9,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.iadesocial.activity.LoginActivity
 import com.example.iadesocial.activity.SignUpActivity
-import com.example.iadesocial.data.models.views.WelcomeView
+import com.example.iadesocial.ui.views.WelcomeView
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

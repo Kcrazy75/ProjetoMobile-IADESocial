@@ -1,7 +1,7 @@
 package com.example.iadesocial.data.models.entities
 
 data class Profile(
-    val profileID: Int,
+    val profileID: Int? = null,
     val name: String,
     val bio: String,
     val profilePicture: String,

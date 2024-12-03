@@ -1,4 +1,4 @@
-package com.example.iadesocial.data.models.views
+package com.example.iadesocial.ui.views
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement

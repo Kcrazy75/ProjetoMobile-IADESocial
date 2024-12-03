@@ -1,5 +1,6 @@
-package com.example.iadesocial.data.models.views
+package com.example.iadesocial.ui.views
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -28,41 +30,30 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableIntStateOf
 import com.example.iadesocial.R
-import com.example.iadesocial.data.models.UserViewModel
-import com.example.iadesocial.data.models.entities.Profile
-import com.example.iadesocial.data.models.entities.User
 
 @Preview(showBackground = true)
 @Composable
-fun SignUpScreenPreview(){
-    SignUpView(onSignUpClick = {})
+fun LoginScreenPreview(){
+    LoginView(onLoginClick = {_,_ -> })
 }
 
 @Composable
-fun SignUpView(onSignUpClick: (User) -> Unit) {
+fun LoginView(onLoginClick: (String, String) -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var studentID by remember { mutableIntStateOf(0) }
-    val studentid = ""
-
-    val email by remember { mutableStateOf("") }
-    val bio by remember { mutableStateOf("") }
-    val profilePicture by remember { mutableStateOf("") }
-
     var showPassword by remember { mutableStateOf(value = false) }
-
-    var passwordC by remember { mutableStateOf("") }
-    var showPasswordC by remember { mutableStateOf(value = false) }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -71,36 +62,15 @@ fun SignUpView(onSignUpClick: (User) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Top
     ) {
+        Spacer(modifier = Modifier.height(70.dp))
         Image(
             painter = painterResource(R.drawable.ic_applogo),
             contentDescription = null,
             modifier = Modifier.size(240.dp)
         )
+
         //Spacer(modifier = Modifier.height(32.dp))
 
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = studentid,
-            onValueChange = { studentID = it.toInt() },
-            singleLine = true,
-            label = { Text(text = "Student ID") },
-            placeholder = { Text(text = "Type Student ID Here") },
-            shape = RoundedCornerShape(percent = 20),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = name,
-            onValueChange = { newText -> name = newText },
-            singleLine = true,
-            label = { Text(text = "Full Name") },
-            placeholder = { Text(text = "Type Name here") },
-            shape = RoundedCornerShape(percent = 20),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
-        )
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -108,10 +78,13 @@ fun SignUpView(onSignUpClick: (User) -> Unit) {
             onValueChange = { newText -> username = newText },
             singleLine = true,
             label = { Text(text = "Username") },
-            placeholder = { Text(text = "Type Username here") },
+            placeholder = { Text(text = "Type username here") },
             shape = RoundedCornerShape(percent = 20),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
         )
+
+        //Spacer(modifier = Modifier.height(16.dp))
+
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
@@ -144,75 +117,39 @@ fun SignUpView(onSignUpClick: (User) -> Unit) {
                 }
             }
         )
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth(),
-            value = passwordC,
-            onValueChange = { newText -> passwordC = newText },
-            singleLine = true,
-            label = { Text(text = "Confirm Password") },
-            placeholder = { Text(text = "Type password here") },
-            shape = RoundedCornerShape(percent = 20),
-            visualTransformation = if (showPasswordC) {
-                VisualTransformation.None
-            } else { PasswordVisualTransformation() },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            trailingIcon = {
-                if (showPasswordC) {
-                    IconButton(onClick = { showPasswordC = false }) {
-                        Icon(
-                            imageVector = Icons.Filled.Visibility,
-                            contentDescription = "show_password"
-                        )
-                    }
-                } else {
-                    IconButton(
-                        onClick = { showPasswordC = true }) {
-                        Icon(
-                            imageVector = Icons.Filled.VisibilityOff,
-                            contentDescription = "hide_password"
-                        )
-                    }
-                }
-            }
-        )
 
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
             onClick = {
-                val user = User(
-                    userID = 0,
-                    username = username,
-                    email = email,
-                    password = password,
-                    name = name,
-                    studentID = studentID,
-                    profile = Profile(
-                        profileID = 0,
-                        name = name,
-                        bio = bio,
-                        profilePicture = profilePicture,
-                        posts = emptyList(),
-                        comments = emptyList(),
-                        followers = emptyList(),
-                        following = emptyList(),
-                    )
-                )
-                onSignUpClick(user)
-            },
+                if (username.isNotEmpty() && password.isNotEmpty()) {
+                    onLoginClick(username, password)
+                } else { Toast.makeText( context, "Please enter all fields", Toast.LENGTH_SHORT ).show() } },
             colors = ButtonColors(
                 containerColor = Color(0xFFA52A2A),
                 contentColor = Color.Black,
                 disabledContainerColor = Color.Gray,
-                disabledContentColor = Color.Black),
-
+                disabledContentColor = Color.Black
+            ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp)
                 .height(50.dp)
         ) {
-            Text("Sign Up")
+            Text("Login")
+        }
+
+        TextButton(
+            onClick = { /* navController.navigate("forgotpassword") */ },
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        ) {
+            Text(
+                buildAnnotatedString {
+                    withStyle(SpanStyle(Color.Black)){ append("Forgot Password? ")}
+                    withStyle(SpanStyle(Color.Blue)){append("Click Here!")}
+                    //append("Click Here!")
+                }
+            )
         }
     }
 }

@@ -10,6 +10,7 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiService {
+    //Login and Sign-up
     @POST("users/login")
     fun loginUser(@Query("username") username: String, @Query("password") password: String): Call<User>
 
