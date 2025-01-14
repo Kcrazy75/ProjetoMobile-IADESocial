@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout.compose.android)
     implementation(libs.androidx.benchmark.macro)
     implementation(libs.androidx.runtime.livedata)
+    implementation(libs.navigation.compose)
 
     testImplementation(libs.junit)
 

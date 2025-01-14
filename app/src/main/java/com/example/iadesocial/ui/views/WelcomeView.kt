@@ -21,14 +21,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.iadesocial.R
 
 @Preview(showBackground = true)
 @Composable
-fun WelcomeScreenPreview(){ WelcomeView(onLoginClick = {}, onSignUpClick = {}) }
+fun WelcomeScreenPreview(){
+    WelcomeView(onLogin = {}, onSignUp = {})
+}
 
 @Composable
-fun WelcomeView(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
+fun WelcomeView(onLogin: () -> Unit, onSignUp: () -> Unit) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,7 +56,7 @@ fun WelcomeView(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
         )
         Spacer(modifier = Modifier.height(16.dp))
         Button(
-            onClick = onLoginClick,
+            onClick = onLogin,
             colors = ButtonColors(
                 containerColor = Color(0xFFA52A2A),
                 contentColor = Color.Black,
@@ -66,7 +71,7 @@ fun WelcomeView(onLoginClick: () -> Unit, onSignUpClick: () -> Unit) {
             Text("Login")
         }
         Button(
-            onClick = onSignUpClick,
+            onClick = onSignUp,
             colors = ButtonColors(
                 containerColor = Color(0xFFA52A2A),
                 contentColor = Color.Black,

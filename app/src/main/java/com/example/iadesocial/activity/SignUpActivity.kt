@@ -24,9 +24,7 @@ class SignUpActivity : ComponentActivity() {
             Surface(color = Color(0xFFFAFAFA)) {
                 val context = this
                 SignUpView(
-                    onSignUpClick = { user ->
-                        registerUser(user, context)
-                    }
+                    onSignUp = { user -> registerUser(user, context) }
                 )
             }
         }
@@ -55,5 +53,5 @@ class SignUpActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun SignUpScreenPreview(){
-    SignUpView(onSignUpClick = {})
+    SignUpView(onSignUp = {})
 }

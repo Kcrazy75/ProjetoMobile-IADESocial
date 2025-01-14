@@ -3,6 +3,8 @@ package com.example.iadesocial.api
 import com.example.iadesocial.data.models.entities.Comment
 import com.example.iadesocial.data.models.entities.Follower
 import com.example.iadesocial.data.models.entities.Like
+import com.example.iadesocial.data.models.entities.LoginRequest
+import com.example.iadesocial.data.models.entities.LoginResponse
 import com.example.iadesocial.data.models.entities.Post
 import com.example.iadesocial.data.models.entities.Profile
 import com.example.iadesocial.data.models.entities.User
@@ -17,6 +19,8 @@ interface ApiService {
     @POST("users/signup")
     fun signUpUser(@Body user: User): Call<User>
 
+    @POST("auth/login")
+    fun login(@Body loginRequest: LoginRequest): Call<LoginResponse>
 
     // User Endpoints
     @GET("users")

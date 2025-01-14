@@ -60,6 +60,11 @@ fun PostItem(post: Post, comments: List<Comment>) {
     var selectedTab by remember { mutableStateOf("Home") }
     var isExpanded by remember { mutableStateOf(false) }
 
+    var isLiked by remember { mutableStateOf(false) }
+    var likeCount by remember { mutableStateOf(2) }
+
+    var commentCount by remember { mutableStateOf(2) }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -134,7 +139,7 @@ fun PostItem(post: Post, comments: List<Comment>) {
             Text(
                 modifier = Modifier
                     .padding(4.dp)
-                    .width(260.dp)
+                    .width(250.dp)
                     .clickable{ showFullContent = !showFullContent },
                 text = buildAnnotatedString{
                     withStyle(style = SpanStyle(fontWeight = FontWeight.Bold))
@@ -147,24 +152,46 @@ fun PostItem(post: Post, comments: List<Comment>) {
             )
             Row (
                 modifier = Modifier
+                    .padding(4.dp)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
             ) {
-                IconButton(onClick = { /* Like Action */ })
-                {
+                IconButton(onClick = {
+                /* Like Action */
+                    if (!isLiked) {
+                        isLiked = true
+                        likeCount++
+                    } else {
+                        isLiked = false
+                        likeCount--
+                    }
+                }) {
                     Icon(
                         imageVector = Icons.Outlined.ThumbUp,
                         contentDescription = "Like Icon",
                         tint = Color.Black
                     )
                 }
-                IconButton(onClick = { /* Save Action */ }) {
+                Text(
+                    text = "$likeCount",
+                    color = Color.Black
+                )
+
+                IconButton(onClick = {
+                /* Save Action */
+                }) {
                     Icon(
                         imageVector = Icons.Outlined.BookmarkBorder,
                         contentDescription = "Save Icon",
                         tint = Color.Black
                     )
                 }
+
+                Text(
+                    text = "$commentCount",
+                    color = Color.Black
+                )
             }
         }
         //Placeholder for comments

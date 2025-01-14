@@ -17,9 +17,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             Surface{
                 WelcomeView(
-                    onLoginClick = { startActivity(Intent(this, LoginActivity::class.java)) },
-                    //onLoginClick = { startActivity(Intent(this, MainFeed::class.java)) },
-                    onSignUpClick = { startActivity(Intent(this, SignUpActivity::class.java)) }
+                    //onLogin = { startActivity(Intent(this, LoginActivity::class.java)) },     //comentar quando tiver a testar
+                    onLogin = { startActivity(Intent(this, MainFeed::class.java)) },
+                    onSignUp = { startActivity(Intent(this, SignUpActivity::class.java)) }
                 )
             }
         }
@@ -28,4 +28,5 @@ class MainActivity : ComponentActivity() {
 
 @Preview(showBackground = true)
 @Composable
-fun WelcomeScreenPreview(){ WelcomeView(onLoginClick = {}, onSignUpClick = {}) }
+fun WelcomeScreenPreview(){ WelcomeView(onLogin = {}, onSignUp = {}) }
+

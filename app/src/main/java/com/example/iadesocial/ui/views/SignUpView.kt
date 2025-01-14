@@ -36,6 +36,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.iadesocial.R
 import com.example.iadesocial.data.models.entities.Profile
 import com.example.iadesocial.data.models.entities.User
@@ -43,11 +45,11 @@ import com.example.iadesocial.data.models.entities.User
 @Preview(showBackground = true)
 @Composable
 fun SignUpScreenPreview(){
-    SignUpView(onSignUpClick = {})
+    SignUpView(onSignUp = {})
 }
 
 @Composable
-fun SignUpView(onSignUpClick: (User) -> Unit) {
+fun SignUpView(onSignUp: (User) -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var name by remember { mutableStateOf("") }
@@ -216,7 +218,7 @@ fun SignUpView(onSignUpClick: (User) -> Unit) {
                             following = emptyList(),
                         )
                     )
-                    onSignUpClick(user)
+                    onSignUp(user)
                 } else {
                     Toast.makeText(context, "Please fill in all fields and ensure passwords match", Toast.LENGTH_SHORT).show()
                 }

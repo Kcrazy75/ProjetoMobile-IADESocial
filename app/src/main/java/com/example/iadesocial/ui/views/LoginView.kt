@@ -40,16 +40,18 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.iadesocial.R
 
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview(){
-    LoginView(onLoginClick = {_,_ -> })
+    LoginView(onLogin = {_,_ -> })
 }
 
 @Composable
-fun LoginView(onLoginClick: (String, String) -> Unit) {
+fun LoginView(onLogin: (String, String) -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(value = false) }
@@ -123,7 +125,7 @@ fun LoginView(onLoginClick: (String, String) -> Unit) {
         Button(
             onClick = {
                 if (username.isNotEmpty() && password.isNotEmpty()) {
-                    onLoginClick(username, password)
+                    onLogin(username, password)
                 } else { Toast.makeText( context, "Please enter all fields", Toast.LENGTH_SHORT ).show() } },
             colors = ButtonColors(
                 containerColor = Color(0xFFA52A2A),

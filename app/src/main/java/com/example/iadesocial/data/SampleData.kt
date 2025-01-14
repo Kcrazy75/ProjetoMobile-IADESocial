@@ -78,7 +78,7 @@ object SampleData {
     // Sample Comments
     val comment1 = Comment(
         commentID = 1,
-        post = Post(1,profile1,"@drawable/ic_postex1","This is post 1",emptyList(),emptyList()),
+        post = Post(1,profile1,"@drawable/ic_postex1","This is comment 1",emptyList(),emptyList()),
         profile = profile2,
         content = "Great post, Kelvin!",
         likes = emptyList()
@@ -86,7 +86,7 @@ object SampleData {
 
     val comment2 = Comment(
         commentID = 2,
-        post = Post(2, profile2, "@drawable/ic_postex2","This is post 2", emptyList(), emptyList()),
+        post = Post(2, profile2, "@drawable/ic_postex2","This is comment 2", emptyList(), emptyList()),
         profile = profile1,
         content = "Interesting insights, Jane!",
         likes = emptyList()

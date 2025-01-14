@@ -33,10 +33,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,23 +44,33 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.iadesocial.activity.MenuAccount
+import com.example.iadesocial.activity.MenuBlocked
+import com.example.iadesocial.activity.MenuSaved
+import com.example.iadesocial.activity.MenuScreen
+import com.example.iadesocial.activity.MenuSettings
 import com.example.iadesocial.activity.ProfileScreen
 import com.example.iadesocial.data.models.entities.Post
+import com.example.iadesocial.data.repositories.PostRepository
 import com.example.iadesocial.data.SampleData
 import com.example.iadesocial.items.PostItem
 
 class MainFeed : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MainFeedScreen(SampleData.postsForProfile1) }
+        setContent { MainFeedScreen(navController = rememberNavController()) }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainFeedScreen(posts: List<Post>) {
+fun MainFeedScreen(navController: NavController) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
-    var selectedTab by remember { mutableStateOf("Home") }
 
     Scaffold(
         modifier = Modifier
@@ -89,15 +99,15 @@ fun MainFeedScreen(posts: List<Post>) {
                     }
                 },
                 navigationIcon = {
-                    if (selectedTab == "Home") {
-                        IconButton(onClick = { /* Handle menu action */ }) {
+                    if (navController.currentDestination?.route != "Home") {        //suposto mudar o icone quando nao estiver na home
+                        IconButton(onClick = { navController.navigate("Menu")}) {
                             Icon(
                                 imageVector = Icons.Filled.MoreVert,
                                 contentDescription = "Menu"
                             )
                         }
                         } else {
-                        IconButton(onClick = { selectedTab = "Home"/* change View */ }) {
+                        IconButton(onClick = { navController.popBackStack()}) {
                             Icon(
                                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                                 contentDescription = "Back"
@@ -106,18 +116,10 @@ fun MainFeedScreen(posts: List<Post>) {
                     }
                 },
                 actions = {
-                    if (selectedTab == "Home") {
+                    if (navController.currentDestination?.route != "Home") {
                         IconButton(onClick = { /* Handle search action */ }) {
                             Icon(
                                 imageVector = Icons.Filled.Search,
-                                contentDescription = "Search",
-                                tint = Color.Black
-                            )
-                        }
-                    } else {
-                        IconButton(onClick = { /* Handle search action */ }) {
-                            Icon(
-                                imageVector = Icons.Filled.MoreVert,
                                 contentDescription = "Search",
                                 tint = Color.Black
                             )
@@ -135,7 +137,7 @@ fun MainFeedScreen(posts: List<Post>) {
             ) {
                 Spacer(modifier = Modifier.width(45.dp))
 
-                IconButton(onClick = { selectedTab = "Home" }) {
+                IconButton(onClick = { navController.navigate("Home") }) {
                     Icon(
                         imageVector = Icons.Filled.Home,
                         contentDescription = "Home",
@@ -161,7 +163,7 @@ fun MainFeedScreen(posts: List<Post>) {
 
                 Spacer(modifier = Modifier.width(65.dp))
 
-                IconButton(onClick = { selectedTab = "Profile" }) {
+                IconButton(onClick = { navController.navigate("Profile") }){
                     Icon(
                         imageVector = Icons.Filled.Person,
                         contentDescription = "profile",
@@ -170,21 +172,33 @@ fun MainFeedScreen(posts: List<Post>) {
                 }
             }
         }
-    ) { innerPadding ->
-        Box(modifier = Modifier.padding(innerPadding)){
-            when (selectedTab) {
-                "Home" -> HomeScreen(posts)
-                //"CreatePost" -> CreatePostScreen()
-                //"Search" -> SearchScreen()
-                //"ViewPost" -> ViewPostScreen()"
-                "Profile" -> ProfileScreen()
-            }
+    ) { innerPadding -> Box(modifier = Modifier.padding(innerPadding)) {
+            //HomeScreen(navController, SampleData.postsForProfile1)
+            AppNavHost(navController as NavHostController)
         }
     }
 }
 
 @Composable
-fun HomeScreen(posts: List<Post>) {
+fun AppNavHost(navController: NavHostController) {
+    //val (posts, setPosts) = remember { mutableStateOf<List<Post>?>(null) }
+    //val (loading, setLoading) = remember { mutableStateOf(true) }
+    val posts = SampleData.postsForProfile1
+
+    NavHost( navController = navController, startDestination = "home" ) {
+        composable("Home") { HomeScreen(navController, posts) }
+        //composable("mainfeed") { MainFeedScreen(navController) }
+        composable("Profile") { ProfileScreen(navController) }
+        composable("Menu") { MenuScreen(navController) }
+        composable("Settings") { MenuSettings(navController) }
+        composable("Saved") { MenuSaved(navController) }
+        composable("Blocked") { MenuBlocked(navController) }
+        composable("Account") { MenuAccount(navController) }
+    }
+}
+
+@Composable
+fun HomeScreen(navController: NavController, posts: List<Post>) {
     LazyColumn(
         state = rememberLazyListState(),
         userScrollEnabled = true,
@@ -196,6 +210,5 @@ fun HomeScreen(posts: List<Post>) {
 @Preview(showBackground = true)
 @Composable
 fun MainFeedPreview() {
-    val posts = SampleData.postsForProfile1
-    MainFeedScreen(posts)
+    MainFeedScreen(navController = rememberNavController())
 }

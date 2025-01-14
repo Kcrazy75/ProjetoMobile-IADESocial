@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.iadesocial.R
 import com.example.iadesocial.data.models.entities.Post
 import com.example.iadesocial.data.models.entities.Profile
@@ -49,43 +53,24 @@ class ProfileActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ProfileScreen()
+            ProfileScreen(navController = rememberNavController())
         }
     }
 }
 
 @Composable
-fun ProfileScreen(){
+fun ProfileScreen(navController: NavController){
     //var selectedTab by remember { mutableIntStateOf(0) }
+    //val scrollState = rememberScrollState()
     val profiles = SampleData.profiles
     val p: Profile = profiles[0]
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth().padding(6.dp)
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_iade),    //p.image
-                contentDescription = null,
-                modifier = Modifier
-                    .border(1.dp, Color.Black, CircleShape)
-                    .padding(3.dp)
-                    .clip(CircleShape)
-                    .size(80.dp)
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceAround,
-                modifier = Modifier.weight(7f)
-            ) {
-                //Profile Stats, need to be coded in
-                ProfileStat(numberText = p.posts.size.toString(), text = "Posts")
-                ProfileStat(numberText = p.followers.size.toString(), text = "Followers")
-                ProfileStat(numberText = p.following.size.toString(), text = "Following")
-            }
-        }
+    Column(
+        modifier = Modifier
+            //.verticalScroll(scrollState)
+            .fillMaxSize()
+    ) {
+        ProfileIdentifier(p)
         Spacer(modifier = Modifier.width(10.dp))
 
         //Just an Example!! Needs to be an Object
@@ -99,11 +84,41 @@ fun ProfileScreen(){
         PostSection(p.posts)
     }
 }
+@Composable
+fun ProfileIdentifier(p: Profile){
+
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(6.dp)
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_iade),    //p.image
+            contentDescription = null,
+            modifier = Modifier
+                .border(1.dp, Color.Black, CircleShape)
+                .padding(3.dp)
+                .clip(CircleShape)
+                .size(80.dp)
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceAround,
+            modifier = Modifier.weight(7f)
+        ) {
+            //Profile Stats, need to be coded in
+            ProfileStat(numberText = p.posts.size.toString(), text = "Posts")
+            ProfileStat(numberText = p.followers.size.toString(), text = "Followers")
+            ProfileStat(numberText = p.following.size.toString(), text = "Following")
+        }
+    }
+}
 
 @Composable
 fun PostSection(post: List<Post>){
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
+        //userScrollEnabled = false,
         modifier = Modifier
             .scale(1.01f)
     ){
@@ -149,7 +164,7 @@ fun PostSection(post: List<Post>){
 @Preview(showBackground = true)
 @Composable
 fun ProfileScreenPreview(){
-    ProfileScreen()
+    ProfileScreen(navController = rememberNavController())
 }
 
 @Composable
